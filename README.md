@@ -75,11 +75,11 @@ ls -l ~/.config | grep dotfiles
 2. **Clone this repository with its submodule:**
 
    ```sh
-   git clone --recurse-submodules <this repo's URL> ~/dotfiles
+   git clone --recurse-submodules git@github.com:Verushan/dotfiles.git ~/dotfiles
    ```
 
-   qtile's submodule is fetched over SSH (`git@github.com:...`). On a machine
-   without a GitHub SSH key, have git use HTTPS instead, then clone:
+   This and qtile's submodule are both fetched over SSH. On a machine without
+   a GitHub SSH key, have git use HTTPS for both instead, then clone:
 
    ```sh
    git config --global url."https://github.com/".insteadOf git@github.com:

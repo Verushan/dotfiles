@@ -1,0 +1,28 @@
+configuration {
+    font: "JetBrainsMono Nerd Font 15";
+
+    /* Blank on purpose: the theme puts a fixed 󰍉 in the input bar, so drun and
+       the bar's -dmenu menus open looking the same. Put a glyph back in any of
+       these if you want that mode named instead. */
+    display-ssh:    "";
+    display-run:    "";
+    display-drun:   "";
+    display-window: "";
+    display-combi:  "";
+    show-icons:     true;
+}
+
+/* qtile.rasi is written by ~/.config/qtile/scripts/apply-theme.py for the
+   current qtile theme: kanagawa-dragon.rasi, catppuccin-mocha.rasi, ... */
+@theme "~/.config/rofi/qtile.rasi"
+
+/* Size lives here rather than in the theme, so the theme stays purely about
+   colour and can be swapped without losing the layout. */
+listview {
+    lines:   3;
+    columns: 1;
+}
+
+window {
+    width: 30%;
+}

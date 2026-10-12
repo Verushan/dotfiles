@@ -1,0 +1,38 @@
+/**
+ * Kanagawa Dragon for rofi - the palette settings/themes/kanagawa-dragon.json
+ * hands to the qtile bar, so the launcher and the bar are drawn from the same
+ * values. The layout itself is in layout.rasi.
+ */
+
+* {
+    /* Straight from themes/kanagawa-dragon.json. */
+    ground:   #1d1c19;  /* dark     */
+    surface:  #22222e;  /* focus    */
+    line:     #282727;  /* inactive */
+    fg:       #c5c9c5;  /* text     */
+    accent:   #87a987;  /* active   */
+    info:     #8ba4b0;  /* color1   */
+    alert:    #c4746e;  /* urgent   */
+    note:     #b6927b;  /* color4   */
+
+    /* Kanagawa Dragon's own greys, for the parts the bar has no colour for. */
+    edge:     #393836;  /* dragonBlack5 */
+    muted:    #7a8382;  /* dragonGray3  */
+    ash:      #625e5a;  /* dragonBlack6 */
+
+    /* 90% over the compositor's blur: enough wallpaper survives to read as
+       glass, not so much that a busy photo climbs into the text. */
+    panel:    #1d1c19e6;
+}
+
+@import "layout.rasi"
+
+/* Matched query: dragonYellow. On the green selected row yellow would be
+   unreadable, so there it is the panel's own ink instead. */
+element-text {
+    highlight: bold #c4b28a;
+}
+
+element selected.normal element-text {
+    highlight: bold #1d1c19;
+}

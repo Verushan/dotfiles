@@ -1,0 +1,12 @@
+[SddmGreeterTheme]
+Name=qtile
+Description=A minimal login screen matching the qtile bar and its theme
+Author=elementrix
+License=MIT
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=qtile
+Theme-API=2.0
+QtVersion=6

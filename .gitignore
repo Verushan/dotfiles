@@ -1,0 +1,13 @@
+# Machine state, not configuration
+fish/fish_variables
+nvim/pack/
+nvim/.luarc.json
+htop/*.tmp
+
+# Written by qtile/scripts/apply-theme.py for whichever theme is current
+ghostty/qtile.conf
+rofi/qtile.rasi
+
+# Backups left beside the files they back up
+*.bak
+*.before-*

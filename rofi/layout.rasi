@@ -1,0 +1,257 @@
+/**
+ * The rofi launcher and the qtile bar's menus, minus their colours.
+ *
+ * Each palette file (kanagawa-dragon.rasi, catppuccin-mocha.rasi, ...) sets
+ * the variables below and imports this; ~/.config/qtile/scripts/apply-theme.py
+ * points config.rasi's qtile.rasi at the one matching the qtile theme.
+ *
+ *   ground   panel ground          accent   selection, search glyph, cursor
+ *   panel    ground, translucent   info     prompt, active rows
+ *   surface  raised rows           alert    errors, urgent rows
+ *   line     hairlines             note     messages
+ *   edge     outer border          fg       text
+ *   ash      scrollbar handle      muted    placeholder, counts
+ *
+ * The whole menu is one rounded panel and rofi's own window *is* that panel.
+ * There is deliberately no padding or transparent margin on `window`: picom
+ * rounds, blurs and animates a window by its frame, so anything the theme
+ * leaves empty inside that frame still gets a blurred, square-cornered slab
+ * painted behind it. That gap between the frame and the drawn boxes is what
+ * shows up as a haze around the edges and as corners that do not line up.
+ *
+ * For the same reason `window`'s border-radius and picom's corner-radius for
+ * `class_g = 'Rofi'` have to stay equal - if you change one, change the other.
+ */
+
+* {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    /* Let picom do the transparency. "screenshot" makes rofi paint a copy of
+       the desktop it grabbed at startup, which the compositor then blurs a
+       second time and drags along through the fade - a stale frame smearing
+       under the panel. */
+    transparency: "real";
+
+    location: center;
+    anchor:   center;
+
+    padding: 0px;
+    margin:  0px;
+    border:  1px;
+    border-color:  @edge;
+    border-radius: 14px;
+
+    background-color: @panel;
+    cursor: "default";
+    children: [ mainbox ];
+}
+
+mainbox {
+    padding: 0px;
+    spacing: 0px;
+    /* mode-switcher is left out on purpose. Naming children here packs them
+       unconditionally - it does not get rofi's automatic "hide the switcher
+       when there is only one mode" - and because config.rasi blanks every
+       display-* name, it renders a row of zero-label buttons: 56px of empty
+       panel under the list, with the scrollbar ending above it. Add it back
+       to this list once those names have glyphs in them; the styling for it
+       is still at the bottom of this file. Shift+Left/Right switches modes
+       either way. */
+    children: [ inputbar, message, listview ];
+}
+
+/* ── input ──────────────────────────────────────────────────────────────── */
+
+inputbar {
+    padding: 20px 20px;
+    /* No spacing: the prompt is empty in drun (config.rasi blanks every
+       display-* name) and would otherwise hold a gap open for nothing. Each
+       child carries its own right margin instead. */
+    spacing: 0px;
+    border:  0px 0px 1px 0px;
+    border-color: @line;
+    children: [ textbox-search, prompt, entry,
+                num-filtered-rows, textbox-numsep, num-rows ];
+}
+
+/* A fixed glyph rather than a mode name, so drun and the bar's -dmenu menus
+   open looking the same. */
+textbox-search {
+    expand: false;
+    font: "JetBrainsMono Nerd Font 17";
+    content: "󰍉";
+    text-color: @accent;
+    vertical-align: 0.5;
+    margin: 0px 10px 0px 0px;
+}
+
+/* Carries -p, which is how the bar's menu scripts label their menus ("Wi-Fi",
+   "Password for ..."). Empty in drun, and then it costs only its margin. */
+prompt {
+    text-color: @info;
+    vertical-align: 0.5;
+    margin: 0px 8px 0px 0px;
+}
+
+entry {
+    placeholder: "Search";
+    placeholder-color: @muted;
+    text-color:  @fg;
+    /* A blinking block, the way the terminal in this rice draws one. It is
+       hidden while the field is empty so the placeholder reads cleanly. */
+    cursor-color: @accent;
+    cursor-width: 9px;
+    blink: true;
+    hide-cursor-on-empty: true;
+    vertical-align: 0.5;
+}
+
+/* Live match count, right-aligned in the input bar: filtered over total, so
+   you can see the search narrowing without looking at the list. entry expands
+   to fill, which is what pushes these to the edge. */
+num-filtered-rows {
+    expand: false;
+    text-color: @muted;
+    vertical-align: 0.5;
+    margin: 0px 0px 0px 12px;
+}
+
+textbox-numsep {
+    expand: false;
+    content: "/";
+    text-color: @line;
+    vertical-align: 0.5;
+    margin: 0px 4px 0px 4px;
+}
+
+num-rows {
+    expand: false;
+    text-color: @muted;
+    vertical-align: 0.5;
+}
+
+/* ── message (rofi -e, and -mesg) ───────────────────────────────────────── */
+
+message {
+    padding: 12px 16px;
+    border:  0px 0px 1px 0px;
+    border-color: @line;
+}
+
+message textbox {
+    text-color: @note;
+    vertical-align: 0.5;
+}
+
+/* rofi -e replaces mainbox entirely; window already draws the panel, so this
+   only needs to hold the text off the edges. */
+error-message {
+    padding: 18px 20px;
+    background-color: transparent;
+}
+
+error-message textbox {
+    text-color: @alert;
+    horizontal-align: 0.5;
+}
+
+/* ── results ────────────────────────────────────────────────────────────── */
+
+listview {
+    padding: 8px;
+    spacing: 2px;
+    scrollbar: true;
+    /* Fixed height: the list keeps its size as you filter, so rofi never
+       resizes mid-keystroke and picom never has a geometry change to animate
+       underneath the blur. */
+    dynamic: false;
+    fixed-height: true;
+    cycle: true;
+}
+
+scrollbar {
+    width: 4px;
+    handle-width: 4px;
+    handle-color: @ash;
+    background-color: @line;
+    border-radius: 2px;
+    margin: 0px 0px 0px 6px;
+}
+
+element {
+    padding: 8px 10px;
+    spacing: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @ground;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: @alert;
+}
+
+element selected.urgent {
+    background-color: @alert;
+    text-color: @ground;
+}
+
+element normal.active,
+element alternate.active {
+    text-color: @info;
+}
+
+element selected.active {
+    background-color: @info;
+    text-color: @ground;
+}
+
+element-icon {
+    size: 1.15em;
+    vertical-align: 0.5;
+    text-color: inherit;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color: inherit;
+    /* The part of the row your query matched is lit up as you type - but
+       highlight is the one property that will not take a variable (@match or
+       var(match) fails the whole theme to parse, silently, and rofi falls
+       back to its built-in one), so each palette file sets it as a literal. */
+}
+
+/* ── mode switcher (rofi -show, combi) ──────────────────────────────────── */
+
+mode-switcher {
+    padding: 8px;
+    spacing: 8px;
+    border:  1px 0px 0px 0px;
+    border-color: @line;
+}
+
+button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-color: @muted;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    cursor: pointer;
+}
+
+button selected {
+    background-color: @surface;
+    text-color: @fg;
+}

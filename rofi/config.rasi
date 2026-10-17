@@ -10,6 +10,10 @@ configuration {
     display-window: "";
     display-combi:  "";
     show-icons:     true;
+
+    /* Open on the primary monitor - the external one while docked, the laptop
+       otherwise - rather than wherever the mouse pointer happens to be. */
+    m: "primary";
 }
 
 /* qtile.rasi is written by ~/.config/qtile/scripts/apply-theme.py for the
